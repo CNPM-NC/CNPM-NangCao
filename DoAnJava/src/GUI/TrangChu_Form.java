@@ -42,6 +42,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -248,7 +249,11 @@ public class TrangChu_Form extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản Lý Gọi Món");
         setLocationByPlatform(true);
-        setMaximumSize(new java.awt.Dimension(809, 488));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 1, new java.awt.Color(51, 153, 255)));
 
@@ -1343,14 +1348,14 @@ public class TrangChu_Form extends javax.swing.JFrame {
     }
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
         // TODO add your handling code here:
-        HoaDon_Form s=new HoaDon_Form();
+        HoaDon_FormNV s=new HoaDon_FormNV(txtUser.getText());
         s.setVisible(true);
         s.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
         // TODO add your handling code here:
-          HoaDon_Form s=new HoaDon_Form();
+          HoaDon_FormNV s=new HoaDon_FormNV(txtUser.getText());
         s.setVisible(true);
         s.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_jMenu3MouseClicked
@@ -1369,6 +1374,13 @@ public class TrangChu_Form extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        int confirm=JOptionPane.showConfirmDialog(null,"Thoát chương trình?",null,YES_NO_OPTION);
+        if(confirm==JOptionPane.YES_OPTION){
+                System.exit(0);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
