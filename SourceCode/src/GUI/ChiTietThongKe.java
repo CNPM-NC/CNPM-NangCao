@@ -77,7 +77,7 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         model2.removeRow(i);
     }
    }
-   boolean sosanh(String s1,String s2){
+   int sosanh(String s1,String s2){
        boolean kt=false;
        String Ngay1,Ngay2;
        String Thang1,Thang2;
@@ -88,22 +88,32 @@ public class ChiTietThongKe extends javax.swing.JFrame {
        Thang2 = s2.substring(3,5);
        Nam1 = s1.substring(6,10);
        Nam2 = s2.substring(6,10);
-       if (Nam1.compareTo(Nam2)>0) return true;
+  
+       if (Nam1.compareTo(Nam2)>0) return 1;
        else 
-       { 
-           if (Thang1.compareTo(Thang2)>0) return true;
-           else
-           {
-               if (Thang1.compareTo(Thang2)<0) return false;
-               if (Ngay1.compareTo(Ngay2)>=0) return true;
+       {
+           if (Nam1.compareTo(Nam2)<0){
+               return 0;
            }
-          // else if (Ngay1.compareTo(Ngay2)>=0) return true;
-               
-       }
-       return false;
+           else 
+           {
+               if (Thang1.compareTo(Thang2)>0) return 1;
+               else 
+               {
+                   if (Thang1.compareTo(Thang2)<0){
+                       return 0;
+                   }
+                   else
+                   {
+                       if (Ngay1.compareTo(Ngay2)>0) return 1;
+                       else {
+                           return 0;
+                       }
+                   }
+               }
+           }
+       } 
        
-    
-        
    }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,6 +132,7 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         dateBatDau = new com.toedter.calendar.JDateChooser();
         dateKetThuc = new com.toedter.calendar.JDateChooser();
+        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -152,7 +163,6 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         txtDoanhThu1 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         txtDoanhThu2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chi Tiết Thống Kê");
@@ -194,6 +204,16 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         dateKetThuc.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         dateKetThuc.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
 
+        jButton2.setBackground(new java.awt.Color(0, 255, 51));
+        jButton2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(0, 51, 255));
+        jButton2.setText("Báo cáo");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -210,12 +230,15 @@ public class ChiTietThongKe extends javax.swing.JFrame {
                 .addGap(14, 14, 14))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(67, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(200, 200, 200)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(132, 132, 132))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,17 +247,18 @@ public class ChiTietThongKe extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dateKetThuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(dateKetThuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(dateBatDau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
 
         jPanel3.setBackground(new java.awt.Color(153, 255, 255));
@@ -564,19 +588,12 @@ public class ChiTietThongKe extends javax.swing.JFrame {
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButton2.setText("Trở về");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
@@ -585,18 +602,14 @@ public class ChiTietThongKe extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(216, 216, 216)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -650,13 +663,19 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         model.setRowCount(0);
         model1.setRowCount(0);
         model2.setRowCount(0);
-     //   System.out.println(sosanh("09/11/2020","06/12/2020"));
+      //  System.out.println(sosanh("09/11/2020","06/12/2020"));
         Object[] row= new Object[2];
         Object[] row1= new Object[2];
         Object[] row2= new Object[2];
+        System.out.println(date1);
+         System.out.println(date2);
         for (int i=0;i<list.size();i++)
         {
-            if (sosanh(list.get(i).getNgayLapHD().toString(),date1)==true&&sosanh(list.get(i).getNgayLapHD().toString(),date2)==false){
+            System.out.println(list.get(i).getNgayLapHD());
+            System.out.println(sosanh(list.get(i).getNgayLapHD().toString(),date1));
+            System.out.println(sosanh(list.get(i).getNgayLapHD().toString(),date2));
+            if (sosanh(list.get(i).getNgayLapHD().toString(),date1)==1&&sosanh(list.get(i).getNgayLapHD().toString(),date2)==0){
+                
                 if (list.get(i).getSoLuong()>max) {
                     max=list.get(i).getSoLuong();
                     Ma=list.get(i).getNgayLapHD();
@@ -670,7 +689,7 @@ public class ChiTietThongKe extends javax.swing.JFrame {
         }
         for (int u=0;u<list2.size();u++)
         {
-            if (sosanh(list2.get(u).getNgayNhap().toString(),date1)==true&&sosanh(list2.get(u).getNgayNhap().toString(),date2)==false){
+            if (sosanh(list2.get(u).getNgayNhap().toString(),date1)==1&&sosanh(list2.get(u).getNgayNhap().toString(),date2)==0){
                 if (list2.get(u).getTongTien()>max3) {
                     max3=list2.get(u).getTongTien();
                     //Ma=list.get(i).getNgayLapHD();
@@ -683,7 +702,7 @@ public class ChiTietThongKe extends javax.swing.JFrame {
             }
         }
          for (int i=0;i<list4.size();i++)
-              if (sosanh(list4.get(i).getNgayLapHD().toString(),date1)==true&&sosanh(list4.get(i).getNgayLapHD().toString(),date2)==false){
+              if (sosanh(list4.get(i).getNgayLapHD().toString(),date1)==1&&sosanh(list4.get(i).getNgayLapHD().toString(),date2)==0){
          { 
             doanhthu=0;
             for (int j=0;j<list1.size();j++){
@@ -714,17 +733,15 @@ public class ChiTietThongKe extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
     }
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Admin_Form a= new Admin_Form();
-        a.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Admin_Form a= new Admin_Form();
         a.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     /**
      * @param args the command line arguments

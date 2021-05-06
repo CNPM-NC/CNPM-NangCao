@@ -5,23 +5,59 @@
  */
 package GUI;
 
+import BUS.CTHDBUS;
+import BUS.HoaDonBUS;
+import DTO.CTHDDTO;
+import DTO.HoaDonDTO;
 import GUI.TrangChu_Form;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author CHINH
  */
 public class ThanhToan_Form extends javax.swing.JFrame {
-  
+    public TrangChu_Form trangchu;
+    private ArrayList<CTHDDTO> list1;
+    DefaultTableModel model;
+    SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy ");
+    SimpleDateFormat ftime = new SimpleDateFormat("HH:mm:ss");
+    SimpleDateFormat fdate = new SimpleDateFormat("dd/MM/yyyy");
+    JTable tbMenu = new JTable();
+    String MaNV;
+    
     /**
      * Creates new form ThanhToan_Form
      */
+    
    
-    public ThanhToan_Form(String tien) {
+    public ThanhToan_Form(String tien, String manv ) {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -30,9 +66,26 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         ImageIcon imageIcon1 = new ImageIcon(new ImageIcon("src//Image//thanhtoan111.jpg").getImage().getScaledInstance(290,150, Image.SCALE_DEFAULT));
         lbThanhToan.setIcon(imageIcon1);
         txtTongTien.setText(tien);
-        
+        list1= new CTHDBUS().getListCTHD();
+       
+        model = (DefaultTableModel) tbMenu.getModel();
+        model.setColumnIdentifiers(new Object[]{
+            "STT", "Tên Món","Số Lượng", "Đơn Giá"
+        });
+        showDBbb();
+        MaNV = manv;
         
     }
+   
+     public String getMaHoaDon(){
+        String x=list1.get(list1.size()-1).getMaHoaDon().toString();
+        String xx=x.substring(4);
+        int ma=Integer.valueOf(xx);
+        //ma++;
+        x=x.replaceFirst(xx,String.valueOf(ma)); 
+        return x;
+    }
+    
     public void OK(){
         int x=Integer.valueOf(txtTongTien.getText());
         int y = 0;
@@ -45,6 +98,7 @@ public class ThanhToan_Form extends javax.swing.JFrame {
                 txtTienThua.setText(String.valueOf(y-x));
             }
     }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -161,11 +215,108 @@ public class ThanhToan_Form extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+     public void showDBbb(){
+       String ss= getMaHoaDon();
+       int k=0;
+       Object[] row= new Object[6];
+        for (int i=0;i<list1.size();i++){
+            if (list1.get(i).getMaHoaDon().toString().equals(ss)){
+                k++;
+                row[0]=k;
+                row[1]=list1.get(i).getMaHoaDon();
+                row[2]=list1.get(i).getTenMon();
+                row[3]=list1.get(i).getMaMon();
+                row[4]=list1.get(i).getSoLuong();
+                row[5]=list1.get(i).getGia();
+                model.addRow(row);
+            }
+        }
+    }
+      public String getDate(){
+        Date x= new Date();
+        return fdate.format(x);
+    }
+     public void SaveToPDF(String path) throws FileNotFoundException, IOException,DocumentException{
+        Document doc = new Document();
+        String u = "Thanh tien: "+ txtTongTien.getText();
+        String u1= "Tien khach tra: "+ txtTienKhachDua.getText();
+        String u2= "Tien thua: "+ txtTienThua.getText();
+        File font= new File("VietFont\\vuTimes.ttf");
+        PdfWriter.getInstance(doc,new FileOutputStream(path+".pdf"));
+        doc.open();
+        BaseFont bf= BaseFont.createFont(font.getAbsolutePath(),BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font fo=new Font(bf,12);
+        Font fo2=new Font(bf,30);
+        PdfPTable table=new PdfPTable(4);
+        Paragraph title= new Paragraph("--------------------\n"+"Coffe House"+"\n--------------------");
+        title.setFont(fo2);
+        title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+        doc.add(title);
+        doc.add(new Phrase("\n",fo));
+        doc.add(new Phrase("\n",fo));
+        doc.add(new Phrase("Mã nhân viên: "+ MaNV +"\n",fo));
+        doc.add(new Phrase("Mã Hóa Đơn: "+getMaHoaDon()+"\n",fo));
+        addHeader(table,fo);
+        int row=tbMenu.getRowCount();
+        for(int i=0;i<row;i++){  
+            String mamon=tbMenu.getValueAt(i,0).toString();
+            String tenmon=tbMenu.getValueAt(i,1).toString();
+            String soluong=tbMenu.getValueAt(i,2).toString();
+            String dongia=tbMenu.getValueAt(i,3).toString();
+            String[] ro={mamon,tenmon,soluong,dongia};
+            addRow(table,ro,fo);
+        }
+        
+        Paragraph sum=new Paragraph(u);
+        sum.setFont(fo);
+        sum.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+        Paragraph sum1=new Paragraph(u1);
+        sum1.setFont(fo);
+        sum1.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+        Paragraph sum2=new Paragraph(u2);
+        sum2.setFont(fo);
+        sum2.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+        Paragraph line=new Paragraph("----------------------------------------------------------------\n");
+        line.setAlignment(1);
+        Paragraph time= new Paragraph("Ngày thanh toán: "+getDate());
+        time.setFont(fo);
+        time.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+        doc.add(table);
+        doc.add(sum);
+        doc.add(sum1);
+        doc.add(sum2);
+        doc.add(line);
+        doc.add(time);
+        doc.close();
+    }
+    private static void addHeader(PdfPTable table, Font font){
+        Stream.of("Mã món", "Tên món", "Số Lượng", "Đơn Giá")
+                   .forEach(columnTitle ->{
+                   PdfPCell header= new PdfPCell();
+                   header.setBackgroundColor(BaseColor.WHITE);
+                   header.setBorderColor(BaseColor.WHITE);
+                   header.setBorderWidth((float) 2.5);
+                   header.setPhrase(new Phrase(columnTitle,font));
+                   table.addCell(header);
+                   });
+    }
+    private static void addRow(PdfPTable table,String[] row,Font font){
+        table.addCell(new Paragraph(row[0],font));
+        table.addCell(new Paragraph(row[1],font));
+        table.addCell(new Paragraph(row[2],font));
+        table.addCell(new Paragraph(row[3],font));
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         OK();
         if(!txtTienThua.getText().equals("")) JOptionPane.showMessageDialog(null,"Thanh toán thành công!!!");
+        try {
+            SaveToPDF(getMaHoaDon());
+        } catch (IOException ex) {
+            Logger.getLogger(ThanhToan_Form.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(ThanhToan_Form.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -211,7 +362,7 @@ public class ThanhToan_Form extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               new ThanhToan_Form("20000").setVisible(true);
+               new ThanhToan_Form("","").setVisible(true);
             }
         });
     }

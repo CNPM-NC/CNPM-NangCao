@@ -43,6 +43,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -51,6 +52,7 @@ import javax.swing.table.DefaultTableModel;
  * @author CHINH
  */
 public class TrangChu_Form extends javax.swing.JFrame {
+    public ThanhToan_Form thanhtoan;
     DefaultTableModel model;
     ArrayList<HoaDonDTO> list1;
     ArrayList<CTHDDTO> list2;
@@ -1237,19 +1239,19 @@ public class TrangChu_Form extends javax.swing.JFrame {
                 }
             }
         }
-        ThanhToan_Form s= new ThanhToan_Form(getThanhTien().toString());
+        ThanhToan_Form s= new ThanhToan_Form(getThanhTien().toString(), txtUser.getText().toString());
         s.setVisible(true);
         s.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-       try{
-            SaveToPDF(txtMaHD.getText());
-       }
-       catch(FileNotFoundException ex){
-           Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
-       } catch (IOException ex) {
-            Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//       try{
+//            SaveToPDF(txtMaHD.getText());
+//       }
+//       catch(FileNotFoundException ex){
+//           Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
+//       } catch (IOException ex) {
+//            Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (DocumentException ex) {
+//            Logger.getLogger(TrangChu_Form.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btThanhToanActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -1288,47 +1290,54 @@ public class TrangChu_Form extends javax.swing.JFrame {
         showExit();
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-    public void SaveToPDF(String path) throws FileNotFoundException, IOException,DocumentException{
-        Document doc = new Document();
-        File font= new File("VietFont\\vuArial.ttf");
-        PdfWriter.getInstance(doc,new FileOutputStream(path+".pdf"));
-        doc.open();
-        BaseFont bf= BaseFont.createFont(font.getAbsolutePath(),BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        Font fo=new Font(bf,12);
-        Font fo2=new Font(bf,25);
-        PdfPTable table=new PdfPTable(4);
-        Paragraph title= new Paragraph("--------------------\n"+"Coffee H"+"\n--------------------");
-        title.setFont(fo2);
-        title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
-        doc.add(title);
-        doc.add(new Phrase("\n",fo));
-        doc.add(new Phrase("\n",fo));
-        doc.add(new Phrase("Mã nhân viên: "+txtUser.getText()+"\n",fo));
-        doc.add(new Phrase("Mã Hóa Đơn: "+txtMaHD.getText()+"\n",fo));
-        addHeader(table,fo);
-        int row=tbMenu.getRowCount();
-        for(int i=0;i<row;i++){
-            String mamon=tbMenu.getValueAt(i,0).toString();
-            String tenmon=tbMenu.getValueAt(i,1).toString();
-            String soluong=tbMenu.getValueAt(i,2).toString();
-            String dongia=tbMenu.getValueAt(i,3).toString();
-            String[] ro={mamon,tenmon,soluong,dongia};
-            addRow(table,ro,fo);
-        }
-        Paragraph sum=new Paragraph("Thành tiền: "+txtThanhTien.getText());
-        sum.setFont(fo2);
-        sum.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
-        Paragraph line=new Paragraph("----------------------------------------------------------------\n");
-        line.setAlignment(1);
-        Paragraph time= new Paragraph("Ngày thanh toán: "+getDate());
-        time.setFont(fo);
-        time.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
-        doc.add(table);
-        doc.add(sum);
-        doc.add(line);
-        doc.add(time);
-        doc.close();
-    }
+   
+//    public void SaveToPDF(String path) throws FileNotFoundException, IOException,DocumentException{
+//        Document doc = new Document();
+//        File font= new File("VietFont\\vuArial.ttf");
+//        PdfWriter.getInstance(doc,new FileOutputStream(path+".pdf"));
+//        doc.open();
+//        BaseFont bf= BaseFont.createFont(font.getAbsolutePath(),BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//        Font fo=new Font(bf,12);
+//        Font fo2=new Font(bf,25);
+//        PdfPTable table=new PdfPTable(4);
+//        Paragraph title= new Paragraph("--------------------\n"+"Coffee H"+"\n--------------------");
+//        title.setFont(fo2);
+//        title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+//        doc.add(title);
+//        doc.add(new Phrase("\n",fo));
+//        doc.add(new Phrase("\n",fo));
+//        doc.add(new Phrase("Mã nhân viên: "+txtUser.getText()+"\n",fo));
+//        doc.add(new Phrase("Mã Hóa Đơn: "+txtMaHD.getText()+"\n",fo));
+//        addHeader(table,fo);
+//        int row=tbMenu.getRowCount();
+//        for(int i=0;i<row;i++){
+//            String mamon=tbMenu.getValueAt(i,0).toString();
+//            String tenmon=tbMenu.getValueAt(i,1).toString();
+//            String soluong=tbMenu.getValueAt(i,2).toString();
+//            String dongia=tbMenu.getValueAt(i,3).toString();
+//            String[] ro={mamon,tenmon,soluong,dongia};
+//            addRow(table,ro,fo);
+//        }
+//        Paragraph sum=new Paragraph("Thành tiền: "+txtThanhTien.getText());
+//        sum.setFont(fo2);
+//        sum.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+//        Paragraph sum1=new Paragraph("Tiền khách đưa: "+ getTextFieldTienKhachDua());
+//        sum1.setFont(fo2);
+//        sum1.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+//        Paragraph sum2=new Paragraph("Tiền thừa: "+ getTextFieldTienThua());
+//        sum2.setFont(fo2);
+//        sum2.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+//        Paragraph line=new Paragraph("----------------------------------------------------------------\n");
+//        line.setAlignment(1);
+//        Paragraph time= new Paragraph("Ngày thanh toán: "+getDate());
+//        time.setFont(fo);
+//        time.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+//        doc.add(table);
+//        doc.add(sum);
+//        doc.add(line);
+//        doc.add(time);
+//        doc.close();
+//    }
     private static void addHeader(PdfPTable table, Font font){
         Stream.of("Mã món", "Tên món", "Số Lượng", "Đơn Giá")
                    .forEach(columnTitle ->{
@@ -1410,7 +1419,7 @@ public class TrangChu_Form extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TrangChu_Form("MaNV003").setVisible(true);
+                new TrangChu_Form("").setVisible(true);
             }
         });
     }
